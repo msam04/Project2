@@ -406,6 +406,8 @@ def train_neural_network(x, network_model):
             print("For run {}, test accuracy is: {}".format(i, average_v_accuracy))
             if(average_v_accuracy >= 0.75):
                 print("Stopping at accuracy: {}, iteration: {}".format(average_v_accuracy, i))
+                sess.close()
+                exit(0)
                 
                 
         #test_data_v = load_all_validation_data()
