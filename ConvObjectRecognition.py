@@ -96,8 +96,8 @@ def display_stats(cifar10_dataset_folder_path, batch_id, sample_id):
     plt.show()
     
 def normalize(list_image_data):
-    #for i in range(len(list_image_data)):
-     #   list_image_data[i] = list_image_data[i]/np.mean(list_image_data[i])
+    for i in range(len(list_image_data)):
+        list_image_data[i] = list_image_data[i]/np.mean(list_image_data[i])
     return list_image_data 
 
 def one_hot_encode(label_value_list):
@@ -312,13 +312,11 @@ def neural_network_model(data):
 def conv_network_model(x):
         
     W_conv1 = weight_variable([5, 5, 3, 32])
-   # W_conv1 = weight_variable([5, 5, 1, 32])
-
-#Weight variable dimensions - filter dimensions - width x height x channels x number of filters
-#Number of channels in output image - number of filters in the filter
+    #Weight variable dimensions - filter dimensions - width x height x channels x number of filters
+    #Number of channels in output image - number of filters in the filter
     b_conv1 = bias_variable([32])
 
-    #x_image = tf.reshape(x, [-1,28,28,1])
+    
     x_image = tf.reshape(x, [-1,32,32,3])
     x_image = tf.cast(x_image, tf.float32)
 #A value of -1 for the reshape parameter is to allow the input to dynamically decide what value that parameter should take.
@@ -382,7 +380,7 @@ def train_neural_network(x, network_model):
         sess.run(tf.initialize_all_variables())
         for i in range(100):
             count = 0
-            for t_b in load_all_training_data(50):
+            for t_b in load_all_training_data(25):
                 count += 1
                 flattened_x = np.reshape(t_b[0], [-1, 32*32*3])
                 ##prediction = network_model(flattened_x)
@@ -394,7 +392,7 @@ def train_neural_network(x, network_model):
                     
             v_count = 0   
             v_accuracy = 0
-            for v_b in load_all_validation_data(50):
+            for v_b in load_all_validation_data(25):
                 v_count += 1
                 flattened_v_x = np.reshape(v_b[0], [-1, 32*32*3])
                 #print("test accuracy %g"%accuracy.eval(feed_dict={x: flattened_v_x, y: v_b[1]})) 
