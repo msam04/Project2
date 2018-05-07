@@ -22,7 +22,8 @@ n_nodes_hl3 = 500
 
 n_classes = 10 #data belongs to classes {'airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck'}
 n_inputs = 3072 #image size is 32X32 and 3 channels - 
-batch_size = 50
+batch_size = 25
+keep_prob = 0.5
 
 class DLProgress(tqdm):
     last_block= 0
@@ -349,14 +350,13 @@ def conv_network_model(x):
     h_pool2_flat = tf.reshape(h_pool2, [-1, 8*8*64])
     h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
-#    keep_prob = tf.placeholder(tf.float32)
-#    h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+    h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
     W_fc2 = weight_variable([1024, 10])
     b_fc2 = bias_variable([10])
 
-#    output=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
-    output=tf.matmul(h_fc1, W_fc2) + b_fc2
+    output=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
+#    output=tf.matmul(h_fc1, W_fc2) + b_fc2
     
        
     return output
@@ -378,7 +378,7 @@ def train_neural_network(x, network_model):
 #reduce_mean reduces all dimensions by computing the mean.
     with tf.Session() as sess:
         sess.run(tf.initialize_all_variables())
-        for i in range(100):
+        for i in range(10000):
             count = 0
             for t_b in load_all_training_data(25):
                 count += 1
@@ -421,7 +421,7 @@ def train_neural_network(x, network_model):
 #image_data, image_labels = load_cfar10_batch(cifar10_dataset_folder_path,1)
 preprocess_and_save_data(cifar10_dataset_folder_path, normalize, one_hot_encode)
 train_neural_network(x, conv_network_model)
-print("done")
+#print("done")
 
 
 
